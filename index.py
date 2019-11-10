@@ -1,6 +1,5 @@
 #!/usr/bin/env python
 #-*- coding: utf-8 -*-
-import ast # https://docs.python.org/3/library/ast.html
 import sys # https://docs.python.org/3/library/sys.html
 
 # inicio = input('Você deseja adcionar um novo contato?(S/N)')
@@ -14,22 +13,40 @@ b = 0
 n = 0
 cont=0
 
+def textoParaAgenda(texto):
+	tabela = {}
+	linhas = texto.split("\n")
+	for linha in linhas:
+		if (linha != ""):
+			colunas = linha.split("|")
+			numero = colunas[0]
+			nome = colunas[1]
+			tabela[numero] = nome
+	return tabela
+
+def agendaParaTexto(tabela):
+	texto = ""
+	for numero in tabela:
+		nome = agenda[numero]
+		texto += f"{nome}|{numero}\n"
+	return texto
+
 def lerAgenda():
-	'''	try:
-			with open('agan.txt', 'r') as f:
-				cont = 1
-				n +=1
-				lerTxt()
-		except IOError:
-			print("Nenhum contato adicionado anteriomente")'''
+	saida = ""
+	try:
+		arquivo = open(arquivoNome, "r")
+		saida = arquivo.read()
+		arquivo.close()
+	except:
+		saida = gravarAgenda(agenda)
+	return saida
 
-	arquivo = open(arquivoNome, "r")
-	agenda.update(ast.literal_eval(arquivo.read()))
+def gravarAgenda(tabela):
+	texto = agendaParaTexto(tabela)
+	arquivo = open(arquivoNome, "w")
+	arquivo.write(texto)
 	arquivo.close()
-	return
-
-def gravarAgenda():
-	return
+	return texto
 
 def mostrarAgenda():
 	conteudoTxt = ""
@@ -92,5 +109,4 @@ def main():
 			sys.exit(1)
 		else:
 			print("Opção inválida!\n" + menuTexto)
-
-main()
+#main()
