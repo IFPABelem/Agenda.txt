@@ -11,21 +11,20 @@ def textoParaAgenda(texto):
 	for linha in linhas:
 		if (linha != ""):
 			colunas = linha.split("|")
-			numero = colunas[0]
-			nome = colunas[1]
+			nome = colunas[0]
+			numero = colunas[1]
 			tabela[numero] = nome
-	agenda = tabela
-	return agenda
+	return tabela
 
-def agendaParaTexto():
+def agendaParaTexto(tabela):
 	texto = ""
-	for numero in agenda:
-		nome = agenda[numero]
+	for numero in tabela:
+		nome = tabela[numero]
 		texto += f"{nome}|{numero}\n"
 	return texto
 
-def gravarAgenda():
-	texto = agendaParaTexto()
+def gravarAgenda(tabela):
+	texto = agendaParaTexto(ordenarAgenda(tabela))
 	arquivo = open(arquivoNome, "w")
 	arquivo.write(texto)
 	arquivo.close()
@@ -37,41 +36,45 @@ def lerAgenda():
 		arquivo = open(arquivoNome, "r")
 		texto = arquivo.read()
 		arquivo.close()
-	except:
-		texto = gravarAgenda()
-	agenda = textoParaAgenda(texto)
-	return agenda
+	except FileNotFoundError:
+		texto = gravarAgenda(agenda)
+	tabela = textoParaAgenda(texto)
+	return tabela
 
-def ordenarAgenda():
-	tabela = sorted(agenda.items(), key = lambda x: x[1])
-	agenda = dict(tabela)
-	return agenda
+def ordenarAgenda(tabela):
+	if (len(tabela) <= 0):
+		return tabela
 
-def mostrarAgenda():
+	tabela = sorted(tabela.items(), key = lambda x: x[1])
+	return dict(tabela)
+
+def mostrarAgenda(tabela):
 	texto = ""
 	i = 0
-	for numero in agenda:
+	for numero in ordenarAgenda(tabela):
 		i += 1
-		nome = agenda[numero]
-		texto += f"{i}. {nome} {numero}\n"
+		nome = tabela[numero]
+		texto += f"{i}. {nome} - {numero}\n"
 	
 	print("\n\nAgenda:")
 	print(texto)
 	return texto
 
-def adcionarContato():
+def adcionarContato(tabela):
 	nome = input('Nome do contato: ').capitalize()
 	numero = input('Número: ')
-	agenda[numero] = nome
+	tabela[numero] = nome
+	return tabela
 
-def alterarContato():
+def alterarContato(tabela):
 	contato = input('Digite o número telefonico do contato que quer alterar: ').capitalize()
-	del agenda[contato]
-	adcionarContato()
+	del tabela[contato]
+	return adcionarContato(tabela)
 
-def excluirContato():
+def excluirContato(tabela):
 	contato = input('Digite o número telefonico do contato que quer excluir: ').capitalize()
-	del agenda[contato]
+	del tabela[contato]
+	return tabela
 
 def main():
 	print('****Agenda agendaefônica em TXT****')
@@ -87,23 +90,24 @@ def main():
 	if (len(agenda) <= 0):
 		terUmNovoContato = input('Você deseja adcionar um novo contato? (S/N): ').capitalize()
 		if (terUmNovoContato == "S"):
-			adcionarContato()
+			agenda = adcionarContato(agenda)
+			gravarAgenda(agenda)
 
 	while True:
 		opcao = input(menuTexto)
 		if (opcao == "1"):
-			mostrarAgenda()
-		if (opcao == "2"):
-			mostrarAgenda()
-			adcionarContato()
+			mostrarAgenda(agenda)
+		elif (opcao == "2"):
+			mostrarAgenda(agenda)
+			agenda = adcionarContato(agenda)
 		elif (opcao == "3"):
-			mostrarAgenda()
-			alterarContato()
+			mostrarAgenda(agenda)
+			agenda = alterarContato(agenda)
 		elif (opcao == "4"):
-			mostrarAgenda()
-			excluirContato()
+			mostrarAgenda(agenda)
+			agenda = excluirContato(agenda)
 		elif (opcao == "5"):
-			gravarAgenda()
+			agenda = gravarAgenda(agenda)
 			sys.exit(1)
 		else:
 			print("Opção inválida!\n" + menuTexto)
@@ -111,5 +115,5 @@ def main():
 
 		print("----- ----- ----- ----- -----")
 		if (opcao != "1"):
-			gravarAgenda()
+			gravarAgenda(agenda)
 main()
