@@ -2,13 +2,8 @@
 #-*- coding: utf-8 -*-
 import sys # https://docs.python.org/3/library/sys.html
 
-# inicio = input('Você deseja adcionar um novo contato?(S/N)')
-
 arquivoNome = "agenda.txt"
 agenda = {}
-taRodando = True
-
-agendaAlterado = {}
 
 def textoParaAgenda(texto):
 	tabela = {}
@@ -19,13 +14,21 @@ def textoParaAgenda(texto):
 			numero = colunas[0]
 			nome = colunas[1]
 			tabela[numero] = nome
-	return tabela
+	agenda = tabela
+	return agenda
 
-def agendaParaTexto(tabela):
+def agendaParaTexto():
 	texto = ""
-	for numero in tabela:
+	for numero in agenda:
 		nome = agenda[numero]
 		texto += f"{nome}|{numero}\n"
+	return texto
+
+def gravarAgenda():
+	texto = agendaParaTexto()
+	arquivo = open(arquivoNome, "w")
+	arquivo.write(texto)
+	arquivo.close()
 	return texto
 
 def lerAgenda():
@@ -35,82 +38,78 @@ def lerAgenda():
 		texto = arquivo.read()
 		arquivo.close()
 	except:
-		saida = gravarAgenda(agenda)
+		texto = gravarAgenda()
+	agenda = textoParaAgenda(texto)
+	return agenda
 
-	tabela = textoParaAgenda(texto)
-	return tabela
-
-def gravarAgenda(tabela):
-	texto = agendaParaTexto(tabela)
-	arquivo = open(arquivoNome, "w")
-	arquivo.write(texto)
-	arquivo.close()
-	return texto
-
-def ordenarAgenda(tabela):
-	novaTabela = sorted(tabela.items(), key = lambda x: x[1])
-	return dict(novaTabela)
+def ordenarAgenda():
+	tabela = sorted(agenda.items(), key = lambda x: x[1])
+	agenda = dict(tabela)
+	return agenda
 
 def mostrarAgenda():
-	conteudoTxt = ""
-	x = n-1
-	agendaAlterado = sorted(agenda.items(), key = lambda t: t[0])
-	agendaAlterado = dict(agendaAlterado)
-	for contatoLista,numeroLista in agendaAlterado.items():
-		conteudoTxt += str(n-x) +')' + contatoLista + ' - ' + numeroLista + '\n'
-		print(n-x,')',contatoLista, ' - ', numeroLista)
-		x-=1
-	arquivo = open(arquivoNome, "w")
-	arquivo.wriagendaines(conteudoTxt)
-	arquivo.close()
-
-	arquivo = open(aquivoNome, "w")
-	arquivo.wriagendaines(str(agendaAlterado))
-	arquivo.close()
+	texto = ""
+	i = 0
+	for numero in agenda:
+		i += 1
+		nome = agenda[numero]
+		texto += f"{i}. {nome} {numero}\n"
+	
+	print("\n\nAgenda:")
+	print(texto)
+	return texto
 
 def adcionarContato():
 	nome = input('Nome do contato: ').capitalize()
 	numero = input('Número: ')
-	agenda[nome] = numero
+	agenda[numero] = nome
 
 def alterarContato():
-	exibirLista()
-	contatoAlterado = input('Digite o nome do contato que quer alterar: ').capitalize()
-	#while(contatoAlterado<1 or contatoAlterado>n):
-		#contatoAlterado = int(input('Índice inexistente! Digite um índice válido: '))
-	del agenda[contatoAlterado]
-	nome = input('Novo nome: ').capitalize()
-	numero = input('Novo número: ')
-	agenda[nome] = numero
+	contato = input('Digite o número telefonico do contato que quer alterar: ').capitalize()
+	del agenda[contato]
+	adcionarContato()
 
 def excluirContato():
-	n-1
-	exibirLista()
-	contatoExcluido = input('Digite o nome do contato que quer excluir: ').capitalize()
-	#while(contatoAlterado<1 or contatoAlterado>n):
-		#contatoAlterado = int(input('Índice inexistente! Digite um índice válido: '))
-	del agenda[contatoExcluido]
+	contato = input('Digite o número telefonico do contato que quer excluir: ').capitalize()
+	del agenda[contato]
 
 def main():
 	print('****Agenda agendaefônica em TXT****')
 	menuTexto = '''Digite o número da opção desejada:
-	1 - Adcionar contato
-	2 - Alterar contato
-	3 - Excluir contato
-	4 - Encerrar programa
+	1 - Mostrar contatos
+	2 - Adcionar contato
+	3 - Alterar contato
+	4 - Excluir contato
+	5 - Encerrar programa
 	'''
 
-	while taRodando:
+	agenda = lerAgenda()
+	if (len(agenda) <= 0):
+		terUmNovoContato = input('Você deseja adcionar um novo contato? (S/N): ').capitalize()
+		if (terUmNovoContato == "S"):
+			adcionarContato()
+
+	while True:
 		opcao = input(menuTexto)
 		if (opcao == "1"):
+			mostrarAgenda()
+		if (opcao == "2"):
+			mostrarAgenda()
 			adcionarContato()
-		elif (opcao == "2"):
-			alterarContato()
 		elif (opcao == "3"):
-			excluirContato()
+			mostrarAgenda()
+			alterarContato()
 		elif (opcao == "4"):
+			mostrarAgenda()
+			excluirContato()
+		elif (opcao == "5"):
+			gravarAgenda()
 			sys.exit(1)
 		else:
 			print("Opção inválida!\n" + menuTexto)
-				
-#main()
+			pass
+
+		print("----- ----- ----- ----- -----")
+		if (opcao != "1"):
+			gravarAgenda()
+main()
