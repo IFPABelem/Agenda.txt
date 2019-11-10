@@ -9,9 +9,6 @@ agenda = {}
 taRodando = True
 
 agendaAlterado = {}
-b = 0
-n = 0
-cont=0
 
 def textoParaAgenda(texto):
 	tabela = {}
@@ -32,14 +29,16 @@ def agendaParaTexto(tabela):
 	return texto
 
 def lerAgenda():
-	saida = ""
+	texto = ""
 	try:
 		arquivo = open(arquivoNome, "r")
-		saida = arquivo.read()
+		texto = arquivo.read()
 		arquivo.close()
 	except:
 		saida = gravarAgenda(agenda)
-	return saida
+
+	tabela = textoParaAgenda(texto)
+	return tabela
 
 def gravarAgenda(tabela):
 	texto = agendaParaTexto(tabela)
@@ -47,6 +46,10 @@ def gravarAgenda(tabela):
 	arquivo.write(texto)
 	arquivo.close()
 	return texto
+
+def ordenarAgenda(tabela):
+	novaTabela = sorted(tabela.items(), key = lambda x: x[1])
+	return dict(novaTabela)
 
 def mostrarAgenda():
 	conteudoTxt = ""
@@ -109,4 +112,5 @@ def main():
 			sys.exit(1)
 		else:
 			print("Opção inválida!\n" + menuTexto)
+				
 #main()
