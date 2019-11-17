@@ -95,22 +95,21 @@ def main():
 
 	while True:
 		opcao = input(menuTexto)
-		if (opcao == "1"):
+		
+		if (opcao in ["1", "2", "3", "4", "5"]):
 			mostrarAgenda(agenda)
-		elif (opcao == "2"):
-			mostrarAgenda(agenda)
+
+		if (opcao == "2"):
 			agenda = adcionarContato(agenda)
 		elif (opcao == "3"):
-			mostrarAgenda(agenda)
 			agenda = alterarContato(agenda)
 		elif (opcao == "4"):
-			mostrarAgenda(agenda)
 			agenda = excluirContato(agenda)
 		elif (opcao == "5"):
 			agenda = gravarAgenda(agenda)
 			sys.exit(1)
 		else:
-			print("Opção inválida!\n" + menuTexto)
+			print("\nOpção inválida!\n" + menuTexto)
 			pass
 
 		print("----- ----- ----- ----- -----")
