@@ -5,6 +5,20 @@ import sys # https://docs.python.org/3/library/sys.html
 arquivoNome = "agenda.txt"
 agenda = {}
 
+def temNumeroNaLista(tabela, numero):
+	if (numero not in tabela):
+		print("Número não encotrado!")
+		return False
+
+	return True
+
+def semNumeroNaLista(tabela, numero):
+	if (numero in tabela):
+		print("Número já existe!")
+		return False
+
+	return True
+
 def textoParaAgenda(texto):
 	tabela = {}
 	linhas = texto.split("\n")
@@ -62,18 +76,31 @@ def mostrarAgenda(tabela):
 
 def adcionarContato(tabela):
 	nome = input('Nome do contato: ').capitalize()
-	numero = input('Número: ')
-	tabela[numero] = nome
+	if (len(nome) <= 1):
+		print("Esse nome é muito pequeno!")
+		return adcionarContato(tabela)
+	
+	contato = input('Número: ')
+	if (len(contato) <= 1):
+		print("Esse número é muito pequeno!")
+		return adcionarContato(tabela)
+	elif (semNumeroNaLista(tabela, contato)):
+		tabela[contato] = nome
+		
 	return tabela
 
 def alterarContato(tabela):
 	contato = input('Digite o número telefonico do contato que quer alterar: ').capitalize()
-	del tabela[contato]
-	return adcionarContato(tabela)
+	if (temNumeroNaLista(tabela, contato)):
+		del tabela[contato]
+		return adcionarContato(tabela)
+	else:
+		return tabela
 
 def excluirContato(tabela):
 	contato = input('Digite o número telefonico do contato que quer excluir: ').capitalize()
-	del tabela[contato]
+	if (temNumeroNaLista(tabela, contato)):
+		del tabela[contato]
 	return tabela
 
 def main():
