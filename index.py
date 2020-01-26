@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 #-*- coding: utf-8 -*-
 import sys # https://docs.python.org/3/library/sys.html
+from datetime import datetime # https://docs.python.org/3/library/datetime.html#strftime-and-strptime-behavior
 
 arquivoNome = "agenda.txt"
 agenda = {}
@@ -64,6 +65,14 @@ def ordenarAgenda(tabela):
 	tabela = sorted(tabela.items(), key = lambda x: x[1])
 	return dict(tabela)
 
+def validacaoData(data):
+	try:
+		data = datetime.strptime(mostrarData(data), '%d/%m/%Y')
+	except:
+		return False
+
+	return data <= data.now();
+
 def mostrarData(data):
 	data += '00000000'
 	data = data[0:8]
@@ -91,7 +100,10 @@ def adcionarContato(tabela):
 
 	data = input('Data de nascimento (DDMMAAAA):').replace('/', '');
 	if (len(data) != 8):
-		print('Falha, data deve contém 8 dígitos')
+		print('Falha, data deve contém 8 dígitos!')
+		return adcionarContato(tabela)
+	elif (validacaoData(data) == False):
+		print('Deve ser uma data válida!')
 		return adcionarContato(tabela)
 	
 	contato = input('Número: ')
@@ -150,7 +162,7 @@ def main():
 		elif (opcao == "5"):
 			agenda = gravarAgenda(agenda)
 			sys.exit(1)
-		else:
+		elif (opcao != "1"):
 			print("\nOpção inválida!\n" + menuTexto)
 			pass
 
