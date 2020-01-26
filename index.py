@@ -106,8 +106,11 @@ def adcionarContato(tabela):
 	if (len(nome) <= 1):
 		print('Esse nome é muito pequeno!')
 		return adcionarContato(tabela)
+	elif (nome.replace(' ', '').isalpha() == False):
+		print('Não use caracteres especiais no nome!')
+		return adcionarContato(tabela)
 
-	data = limparNumero(input('Data de nascimento (DDMMAAAA):'));
+	data = limparNumero(input('Data de nascimento (DDMMAAAA): '));
 	if (len(data) != 8 or data.isdigit() == False):
 		print('Falha, data deve contém 8 dígitos numéricos!')
 		return adcionarContato(tabela)
