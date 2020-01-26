@@ -3,19 +3,19 @@
 import sys # https://docs.python.org/3/library/sys.html
 from datetime import datetime # https://docs.python.org/3/library/datetime.html#strftime-and-strptime-behavior
 
-arquivoNome = "agenda.txt"
+arquivoNome = 'agenda.txt'
 agenda = {}
 
 def temNumeroNaLista(tabela, numero):
 	if (numero not in tabela):
-		print("Número não encotrado!")
+		print('Número não encotrado!')
 		return False
 
 	return True
 
 def semNumeroNaLista(tabela, numero):
 	if (numero in tabela):
-		print("Número já existe!")
+		print('Número já existe!')
 		return False
 
 	return True
@@ -97,14 +97,14 @@ def mostrarAgenda(tabela):
 		data = tabela[numero][1]
 		texto += f"{i}. {nome} ({mostrarData(data)}) - {numero}\n"
 	
-	print("\n\nAgenda:")
+	print('\n\nAgenda:')
 	print(texto)
 	return texto
 
 def adcionarContato(tabela):
 	nome = input('Nome do contato: ').capitalize()
 	if (len(nome) <= 1):
-		print("Esse nome é muito pequeno!")
+		print('Esse nome é muito pequeno!')
 		return adcionarContato(tabela)
 
 	data = limparNumero(input('Data de nascimento (DDMMAAAA):'));
@@ -120,7 +120,7 @@ def adcionarContato(tabela):
 		print('Somente números são aceitos!')
 		return adcionarContato(tabela)
 	elif (len(contato) <= 1):
-		print("Esse número é muito pequeno!")
+		print('Esse número é muito pequeno!')
 		return adcionarContato(tabela)
 	elif (semNumeroNaLista(tabela, contato)):
 		tabela[contato] = ['', '']
@@ -175,10 +175,10 @@ def main():
 			agenda = gravarAgenda(agenda)
 			sys.exit(1)
 		elif (opcao != "1"):
-			print("\nOpção inválida!\n" + menuTexto)
+			print(f'\nOpção inválida!\n{menuTexto}')
 			pass
 
-		print("----- ----- ----- ----- -----")
+		print('----- ----- ----- ----- -----')
 		if (opcao != "1"):
 			gravarAgenda(agenda)
 main()
