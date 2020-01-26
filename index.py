@@ -65,6 +65,15 @@ def ordenarAgenda(tabela):
 	tabela = sorted(tabela.items(), key = lambda x: x[1])
 	return dict(tabela)
 
+def limparNumero(numero):
+	numero = numero.replace('/', '')
+	numero = numero.replace('-', '')
+	numero = numero.replace('(', '')
+	numero = numero.replace(')', '')
+	numero = numero.replace('_', '')
+	numero = numero.replace(' ', '')
+	return numero
+
 def validacaoData(data):
 	try:
 		data = datetime.strptime(mostrarData(data), '%d/%m/%Y')
@@ -98,16 +107,19 @@ def adcionarContato(tabela):
 		print("Esse nome é muito pequeno!")
 		return adcionarContato(tabela)
 
-	data = input('Data de nascimento (DDMMAAAA):').replace('/', '');
-	if (len(data) != 8):
-		print('Falha, data deve contém 8 dígitos!')
+	data = limparNumero(input('Data de nascimento (DDMMAAAA):'));
+	if (len(data) != 8 or data.isdigit() == False):
+		print('Falha, data deve contém 8 dígitos numéricos!')
 		return adcionarContato(tabela)
 	elif (validacaoData(data) == False):
 		print('Deve ser uma data válida!')
 		return adcionarContato(tabela)
 	
-	contato = input('Número: ')
-	if (len(contato) <= 1):
+	contato = limparNumero(input('Número: '))
+	if (contato.isdigit() == False):
+		print('Somente números são aceitos!')
+		return adcionarContato(tabela)
+	elif (len(contato) <= 1):
 		print("Esse número é muito pequeno!")
 		return adcionarContato(tabela)
 	elif (semNumeroNaLista(tabela, contato)):
