@@ -27,14 +27,16 @@ def textoParaAgenda(texto):
 			colunas = linha.split("|")
 			nome = colunas[0]
 			numero = colunas[1]
-			tabela[numero] = nome
+			data = colunas[2]
+			tabela[numero] = [nome, data]
 	return tabela
 
 def agendaParaTexto(tabela):
 	texto = ""
 	for numero in tabela:
-		nome = tabela[numero]
-		texto += f"{nome}|{numero}\n"
+		nome = tabela[numero][0]
+		data = tabela[numero][1]
+		texto += f"{nome}|{numero}|{data}\n"
 	return texto
 
 def gravarAgenda(tabela):
@@ -62,13 +64,20 @@ def ordenarAgenda(tabela):
 	tabela = sorted(tabela.items(), key = lambda x: x[1])
 	return dict(tabela)
 
+def mostrarData(data):
+	data += '00000000'
+	data = data[0:8]
+	data = f'{data[0:2]}/{data[2:4]}/{data[4:8]}'
+	return data
+
 def mostrarAgenda(tabela):
 	texto = ""
 	i = 0
 	for numero in ordenarAgenda(tabela):
 		i += 1
-		nome = tabela[numero]
-		texto += f"{i}. {nome} - {numero}\n"
+		nome = tabela[numero][0]
+		data = tabela[numero][1]
+		texto += f"{i}. {nome} ({mostrarData(data)}) - {numero}\n"
 	
 	print("\n\nAgenda:")
 	print(texto)
@@ -79,14 +88,20 @@ def adcionarContato(tabela):
 	if (len(nome) <= 1):
 		print("Esse nome é muito pequeno!")
 		return adcionarContato(tabela)
+
+	data = input('Data de nascimento (DDMMAAAA):').replace('/', '');
+	if (len(data) != 8):
+		print('Falha, data deve contém 8 dígitos')
+		return adcionarContato(tabela)
 	
 	contato = input('Número: ')
 	if (len(contato) <= 1):
 		print("Esse número é muito pequeno!")
 		return adcionarContato(tabela)
 	elif (semNumeroNaLista(tabela, contato)):
-		tabela[contato] = nome
-		
+		tabela[contato] = ['', '']
+		tabela[contato][0] = nome
+		tabela[contato][1] = data
 	return tabela
 
 def alterarContato(tabela):
